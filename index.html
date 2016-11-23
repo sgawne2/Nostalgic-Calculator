@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .main {
+            background-color: #333;
+            margin:auto;
+            text-align:center;
+            width: 20vw;
+            min-width:250px;
+            height: 25vw;
+            min-height: 400px;
+            padding:20px;
+            border-radius: 10px;
+        }
+        .display {
+            height:50px;
+            margin:20px;
+            background-color:darkseagreen;
+            border:2px solid lightseagreen;
+        }
+        .buttons {
+            text-align:center;
+            height:100%;
+            margin:auto;
+            position:relative;
+        }
+        .buttons button {
+            width:22%;
+            height:50px;
+            font-size: 20px;
+            font-weight: bold;
+            margin:2px 0px;
+            background-color: #00bfff;
+            color:white;
+            cursor: pointer;
+            border:none;
+            border-radius: 5px;
+            box-shadow: 0 2px #007095;
+            outline: none
+        }
+        .buttons .number:active {
+            transform: translateY(2px);
+            box-shadow:inset 0 2px #007095;
+        }
+        .buttons .operator {
+            background-color: #ffffff;
+            box-shadow: 0 2px #aaa;
+            color:black;
+        }
+        .buttons .operator:active {
+            transform: translateY(2px);
+            box-shadow:inset 0  2px #aaa;
+        }
+        .buttons .equate {
+            width:45%;
+            background-color: #e1e900;
+            box-shadow: 0 2px #939700;
+            color:black;
+        }
+        .buttons .equate:active {
+            transform: translateY(2px);
+            box-shadow:inset 0 2px #939700;
+        }
+        .buttons .other {
+            background-color: #8b0000;
+            box-shadow: 0 2px #4D0000;
+            color:white;
+        }
+        .buttons .other:active {
+            transform: translateY(2px);
+            box-shadow:inset 0 2px #4D0000;
+        }
+    </style>
+</head>
+<body>
+<div class="calc main">
+    <div class="display">
+
+    </div>
+    <div class="buttons">
+        <br>
+        <button class="other" value="DEL">DEL</button>
+        <button class="other" value="clear">C</button>
+        <button class="other" value="clearAll">CE</button>
+        <button class="operator" value="divide">/</button>
+        <br>
+        <button class="number" value="7">7</button>
+        <button class="number" value="8">8</button>
+        <button class="number" value="9">9</button>
+        <button class="operator" value="multiply">x</button>
+        <br>
+        <button class="number" value="4">4</button>
+        <button class="number" value="5">5</button>
+        <button class="number" value="6">6</button>
+        <button class="operator" value="subtract">-</button>
+        <br>
+        <button class="number" value="1">1</button>
+        <button class="number" value="2">2</button>
+        <button class="number" value="3">3</button>
+        <button class="operator" value="add">+</button>
+        <br>
+        <button class="number" value="point">.</button>
+        <button class="number" value="0">0</button>
+        <button class="equate" value="solve">=</button>
+        <br>
+    </div>
+</div>
+</body>
+</html>
