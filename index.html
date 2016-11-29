@@ -2,17 +2,80 @@
 <html>
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-    <script src="http://Learning-Fuze.github.io/calculator/calculator.js"></script>
     <script>
-        var my_calculator = new calculator(my_calculator_function);
-        $(document).ready(function(){
+//        var my_calculator = new calculator(my_calculator_function);
+//        $(document).ready(function(){
+//            $('.buttons button').click(function() {
+//                var val = $(this).val();
+//                my_calculator.addItem(val);
+//            });
+//        });
+//        function my_calculator_function(type, value, item) {
+//            $(".display-main").text(value);
+//        }
+        var my_calculator = new Calculator();
+        $(document).ready(function() {
             $('.buttons button').click(function() {
-                var val = $(this).val();
-                my_calculator.addItem(val);
+                var type = $(this).attr('class');
+                var value = $(this).val();
+                my_calculator.button_clicked(type, value);
             });
         });
-        function my_calculator_function(type, value, item) {
-            $(".display-main").text(value);
+
+        var global_inputs_array = [];
+        var index = 0;
+//        function calculator() {
+//            var type = $(this).attr('class');
+//            var val = $(this).val();
+//            var last_val = null;
+//            var equationString = "";
+//            if(type === "number" && global_inputs_array.length && global_inputs_array[index-1].type === "number") {//if this input is a number, not the first input, and the last input was also a number
+//                index--;
+//                last_val = global_inputs_array[index].value;
+//                val = last_val + val;
+//            }
+//            if(type === "equalSign") {
+//                for(var i = 0; i < global_inputs_array.length; i++) {
+//                    equationString += global_inputs_array[i].value;
+//                }
+//                val = eval(equationString);
+//                console.log(equationString);
+//            }
+//            global_inputs_array[index] = {"type": type, "value": val};
+//            index++;
+//            display(val);
+//            console.log(global_inputs_array);
+//        }
+//
+//        function display(input) {
+//            $('.display-main').text(input);
+//        }
+        function Calculator() {
+            this.index = 0;
+            this.button_clicked = function(type, val) {
+                var last_val = null;
+                var equationString = "";
+                console.log(this.index);
+                if(type === "number" && global_inputs_array.length && global_inputs_array[this.index-1].type === "number") {//if this input is a number, not the first input, and the last input was also a number
+                    this.index--;
+                    last_val = global_inputs_array[this.index].value;
+                    val = last_val + val;
+                }
+                if(type === "equalSign") {
+                    for(var i = 0; i < global_inputs_array.length; i++) {
+                        equationString += global_inputs_array[i].value;
+                    }
+                    val = eval(equationString);
+                    console.log(equationString);
+                }
+                global_inputs_array[index] = {"type": type, "value": val};
+                this.index++;
+                this.display_inputs(val);
+                console.log(global_inputs_array);
+            }
+            this.display_inputs = function(input) {
+                $('.display-main').text(input);
+            }
         }
     </script>
     <style>
@@ -90,13 +153,13 @@
             transform: translateY(2px);
             box-shadow:inset 0  0 #aaa;
         }
-        .buttons .equate {
+        .buttons .equalSign {
             width:45%;
             background-color: #e1e900;
             box-shadow: 0 2px #939700;
             color:black;
         }
-        .buttons .equate:active {
+        .buttons .equalSign:active {
             transform: translateY(2px);
             box-shadow:inset 0 0 #939700;
         }
@@ -145,7 +208,7 @@
         <br>
         <button class="number" value=".">.</button>
         <button class="number" value="0">0</button>
-        <button class="equate" value="=">=</button>
+        <button class="equalSign" value="=">=</button>
         <br>
     </div>
 </div>
