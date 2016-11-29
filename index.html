@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script src="http://Learning-Fuze.github.io/calculator/calculator.js"></script>
+    <script>
+        var my_calculator = new calculator(my_calculator_function);
+        $(document).ready(function(){
+            $('.buttons button').click(function() {
+                var val = $(this).val();
+                my_calculator.addItem(val);
+            });
+        });
+        function my_calculator_function(type, value, item) {
+            $(".display-main").text(value);
+        }
+    </script>
     <style>
+        @font-face {
+            font-family: digital-7;
+            src: url(digital-7.ttf);
+        }
         .main {
             background-color: #333;
+            position:relative;
             margin:auto;
             text-align:center;
             width: 20vw;
@@ -13,11 +32,30 @@
             padding:20px;
             border-radius: 10px;
         }
-        .display {
+        .display{
             height:50px;
             margin:20px;
-            background-color:darkseagreen;
             border:2px solid lightseagreen;
+            font-family: digital-7;
+            color: #3f553f;
+            font-size:50px;
+            text-align:right;
+            overflow:hidden;
+            position:relative;
+        }
+        .display-bg {
+            width:100%;
+            height:100%;
+            background-color:darkseagreen;
+            color: #89b289;
+            position:absolute;
+            box-shadow:inset 2px 5px 2px #465c46;
+        }
+        .display-main {
+            width:100%;
+            position:absolute;
+            z-index:2;
+
         }
         .buttons {
             text-align:center;
@@ -41,7 +79,7 @@
         }
         .buttons .number:active {
             transform: translateY(2px);
-            box-shadow:inset 0 2px #007095;
+            box-shadow:inset 0 0px #007095;
         }
         .buttons .operator {
             background-color: #ffffff;
@@ -50,7 +88,7 @@
         }
         .buttons .operator:active {
             transform: translateY(2px);
-            box-shadow:inset 0  2px #aaa;
+            box-shadow:inset 0  0 #aaa;
         }
         .buttons .equate {
             width:45%;
@@ -60,7 +98,7 @@
         }
         .buttons .equate:active {
             transform: translateY(2px);
-            box-shadow:inset 0 2px #939700;
+            box-shadow:inset 0 0 #939700;
         }
         .buttons .other {
             background-color: #8b0000;
@@ -69,40 +107,45 @@
         }
         .buttons .other:active {
             transform: translateY(2px);
-            box-shadow:inset 0 2px #4D0000;
+            box-shadow:inset 0 0 #4D0000;
         }
     </style>
 </head>
 <body>
 <div class="calc main">
     <div class="display">
-
+        <div class="display-bg">
+            88888888888
+        </div>
+        <div class="display-main">
+        </div>
     </div>
+
     <div class="buttons">
         <br>
         <button class="other" value="DEL">DEL</button>
-        <button class="other" value="clear">C</button>
-        <button class="other" value="clearAll">CE</button>
-        <button class="operator" value="divide">/</button>
+        <button class="other" value="AC">C</button>
+        <button class="other" value="C">CE</button>
+        <button class="operator" value="/">÷</button>
         <br>
         <button class="number" value="7">7</button>
         <button class="number" value="8">8</button>
         <button class="number" value="9">9</button>
-        <button class="operator" value="multiply">x</button>
+        <button class="operator" value="x">x</button>
         <br>
         <button class="number" value="4">4</button>
         <button class="number" value="5">5</button>
         <button class="number" value="6">6</button>
-        <button class="operator" value="subtract">-</button>
+        <button class="operator" value="-">-</button>
         <br>
         <button class="number" value="1">1</button>
         <button class="number" value="2">2</button>
         <button class="number" value="3">3</button>
-        <button class="operator" value="add">+</button>
+        <button class="operator" value="+">+</button>
         <br>
-        <button class="number" value="point">.</button>
+        <button class="number" value=".">.</button>
         <button class="number" value="0">0</button>
-        <button class="equate" value="solve">=</button>
+        <button class="equate" value="=">=</button>
         <br>
     </div>
 </div>
