@@ -94,12 +94,12 @@
                     self.index--;
                 }
                 if (self.index > 2) {
-                    if (clicked_value === "+" || clicked_value === "-") {
+                    //if (clicked_value === "+" || clicked_value === "-") {
                         var solved_value = self.prepare_answer();
                         self.inputs_array = [{"type": "number", "value": solved_value}];
                         self.index = 1;
                         self.display(solved_value);
-                    }
+                    //}
                 }
                 self.last_input = {"type": "operator", "value": clicked_value};
                 self.last_operation = clicked_value;
