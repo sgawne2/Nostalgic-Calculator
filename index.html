@@ -16,6 +16,7 @@
                 //set this.index to 0 so inputs go into the first space in the array
             this.last_input = {};
                 //placeholder for the memory of the object of the last clicked input
+            this.history = [];
             this.last_number = null;
                 //placeholder for the memory of the value of the last number inputted
             this.last_operation = null;
@@ -89,14 +90,25 @@
                 self.index++;
                 self.display(clicked_value);
             };
+            this.find_value = function(value) {
+                //it's like indexOf but it'll find a property of an object in an array
+                var index = -1;
+                for (var i = 0; i < this.inputs_array.length; i++) {
+                    if (this.inputs_array[i].value === value) {
+                        index = i;
+                        return index;
+                    }
+                }
+            };
             this.operator_clicked = function(clicked_value) {
                 if (self.inputs_array.length && self.inputs_array[self.index - 1].type === "operator") {
                     self.index--;
                 }
                 if (self.index > 2) {
-                    //if (clicked_value === "+" || clicked_value === "-") {
+                    //if ( !((clicked_value === "x" || clicked_value === "/") && (self.find_value("+") > -1 || self.find_value("-") > -1)) ) {
                         var solved_value = self.prepare_answer();
-                        self.inputs_array = [{"type": "number", "value": solved_value}];
+                        self.history = [self.inputs_array[0], self.inputs_array[1], self.inputs_array[2]];
+                        self.inputs_array = [{"type": "number", "value": solved_value, "history": self.history}];
                         self.index = 1;
                         self.display(solved_value);
                     //}
@@ -110,7 +122,63 @@
                 var num1 = null;
                 var num2 = null;
                 var operator = null;
-                for (var i = 0; i < this.inputs_array.length; i++) {
+                var lastIndex = this.inputs_array.length-1;
+                var solved_value = null;
+                var solution_index = null;
+                /*
+                if (this.inputs_array.length > 3) {
+                    console.log("array needs order of operations");
+                    for (var i = lastIndex; i >= 0; i -= 2) {
+                        if (this.inputs_array.length - 1 > 0) {
+                            solution_index = i - 2;
+                            if (this.inputs_array[i].type === "number") {
+                                num2 = parseFloat(this.inputs_array[i].value);
+                                this.inputs_array.pop();
+                                operator = this.inputs_array[i - 1].value;
+                                self.last_operation = operator;
+                                this.inputs_array.pop();
+                                num1 = parseFloat(this.inputs_array[i - 2].value);
+                                this.inputs_array.pop();
+                            }
+                            else {
+                                console.log("it's an operator");
+                                num2 = null;
+                                operator = this.inputs_array[i].value;
+                                //this.inputs_array.pop();
+                                num1 = parseFloat(this.inputs_array[i - 1].value);
+                                //this.inputs_array.pop();
+                            }
+                        }
+                        else {
+                            solution_index = 0;
+                            num2 = null;
+                            operator = null;
+                            num1 = parseFloat(this.inputs_array[0].value);
+                        }
+                        console.log(self.last_number, self.last_operation, self.inputs_array);
+                        solved_value = this.do_math(num1, num2, operator);
+                        this.inputs_array[solution_index] = {"type": "number", "value": solved_value};
+                        self.index = solution_index + 1;
+                    }
+                }
+                else {
+                    console.log("array doesn't need order of operations");
+                    for (i = 0; i < this.inputs_array.length; i++) {
+                        if (this.inputs_array[i].type === "number" && num1 === null) {
+                            num1 = this.inputs_array[i].value;
+                            num1 = parseFloat(num1);
+                        }
+                        else if (this.inputs_array[i].type === "number") {
+                            num2 = this.inputs_array[i].value;
+                            num2 = parseFloat(num2);
+                        }
+                        else {
+                            operator = this.inputs_array[i].value;
+                        }
+                    }
+                }
+                */
+                for (i = 0; i < this.inputs_array.length; i++) {
                     if (this.inputs_array[i].type === "number" && num1 === null) {
                         num1 = this.inputs_array[i].value;
                         num1 = parseFloat(num1);
@@ -131,7 +199,8 @@
             };
             this.equals_clicked = function() {
                 var solved_value = self.prepare_answer();
-                self.inputs_array = [{"type": "number", "value": solved_value, "from_result": true}];
+                self.history = [self.inputs_array[0], self.inputs_array[1], self.inputs_array[2]];
+                self.inputs_array = [{"type": "number", "value": solved_value, "from_result": true, "history": self.history}];
                 self.index = 1;
                 self.display(solved_value);
             };
@@ -144,23 +213,55 @@
                 self.display("");
             };
             this.clear_entry_clicked = function() {
-                self.index--;
-                self.inputs_array.pop();
+                if (self.index) {
+                    self.index--;
+                }
                 if (self.inputs_array.length) {
-                    for (var i = 0; i < self.inputs_array.length; i++) {
-                        if (self.inputs_array[i].type === "number") {
-                            self.last_number = self.inputs_array[i].value;
+                    //if the array has objects in it
+                    if (self.inputs_array[self.index].history) {
+                        //if the item at the current index (after decrement) has a history property
+                        console.log("current index", self.index);
+                        self.inputs_array = self.inputs_array[self.index].history;
+                        self.index = 3;
+                        console.log("current index", self.index);
+                        self.display(self.inputs_array[self.inputs_array.length - 1].value);
+                    }
+                    else {
+                        //the item at the current index (after decrement) doesn't have history property
+                        self.inputs_array.pop();
+                        //remove the last object from the array
+                        if (self.index) {
+                            self.index--;
+                            //decrement the index again
                         }
-                        else {
-                            self.last_operation = self.inputs_array[i].value;
+                        if (self.inputs_array.length) {
+                            //if the array still has objects after pop();
+                            for (var i = 0; i < self.inputs_array.length; i++) {
+                                if (self.inputs_array[i].type === "number") {
+                                    self.last_number = self.inputs_array[i].value;
+                                }
+                                else {
+                                    self.last_operation = self.inputs_array[i].value;
+                                }
+                            }
+                            if (self.inputs_array[self.index].type === "operator") {
+                                self.inputs_array.pop();
+                                if (self.index) {
+                                    self.index--;
+                                    //decrement the index again
+                                }
+                                self.display(self.inputs_array[self.index].value);
+                            }
+                            else {
+                                //pop() removed the last object in the array
+                                self.last_number = null;
+                                self.last_operation = null;
+                                self.display("");
+                            }
+                            self.index++;
                         }
                     }
                 }
-                else {
-                    self.last_number = null;
-                    self.last_operation = null;
-                }
-                self.display("");
             };
             this.delete_clicked = function() {
                 if (self.index) {
@@ -244,12 +345,15 @@
             padding:20px;
             border-radius: 10px;
             border: 3px solid #555;
-            border-bottom: 0px;
+            border-bottom: 0;
             box-shadow: 0 3px #222;
+        }
+        .display-container {
+            border-radius: 5px;
+            margin: 20px;
         }
         .display{
             height:50px;
-            margin:20px;
             border:2px solid lightseagreen;
             font-family: digital-7, sans-serif;
             color: #3f553f;
@@ -293,24 +397,24 @@
             height:50px;
             font-size: 20px;
             font-weight: bold;
-            margin:2px 0px;
+            margin:2px 0;
             background-color: #009dd3;
             color:#dcdcdc;
             cursor: pointer;
             border: 2px solid #00b4f5;
-            border-bottom: 0px;
+            border-bottom: 0;
             border-radius: 5px;
             box-shadow: 0 2px #007095;
             outline: none
         }
         .buttons .number:active {
             transform: translateY(2px);
-            box-shadow:inset 0 0px #007095;
+            box-shadow:inset 0 0 #007095;
         }
         .buttons .operator {
             background-color: #dcdcdc;
             border: 2px solid #f5f5f5;
-            border-bottom: 0px;
+            border-bottom: 0;
             box-shadow: 0 2px #aaa;
             color:black;
         }
@@ -322,7 +426,7 @@
             /*width:45%;*/
             background-color: #d4dc00;
             border: 2px solid #edf500;
-            border-bottom: 0px;
+            border-bottom: 0;
             box-shadow: 0 2px #939700;
             color:black;
         }
@@ -333,7 +437,7 @@
         .buttons .AC, .buttons .C, .buttons .DEL {
             background-color: #8b0000;
             border: 2px solid #a00000;
-            border-bottom: 0px;
+            border-bottom: 0;
             box-shadow: 0 2px #4D0000;
             color:#dcdcdc;
         }
@@ -345,17 +449,29 @@
 </head>
 <body>
 <div class="calc main">
-    <div class="display">
-        <div class="display-bg">
-            88888888888
-        </div>
-        <div class="display-main">
+    <div class="display-container">
+        <div class="display">
+            <div class="display-bg">
+                88888888888
+            </div>
+            <div class="display-main">
+            </div>
         </div>
     </div>
     <div id="panel-container">
         <div class="panel">calculator</div>
     </div>
     <div class="buttons">
+        <!--
+        <br>
+        <button class="number" value="^">^</button>
+        <button class="operator" value="√">√</button>
+        <br>
+        <button class="number" value="3.141592653">π</button>
+        <button class="number" value="(">(</button>
+        <button class="number" value=")">)</button>
+        <button class="operator" value="%">%</button>
+        -->
         <br>
         <button class="AC" value="AC">C</button>
         <button class="C" value="C">CE</button>
