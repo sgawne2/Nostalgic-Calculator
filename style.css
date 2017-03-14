@@ -3,9 +3,9 @@
     src: url(digital-7.ttf);
 }
 body {
-    background: url(wood.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
+    background: url(wood.png), url(carpet.jpg);
+    background-size: 100%, 30%;
+    background-repeat: no-repeat, repeat;
 }
 .main {
     background-color: #333;
