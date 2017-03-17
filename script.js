@@ -47,7 +47,6 @@ function Calculator() {
             self.delete_clicked();
             //call delete_clicked if you clicked a delete button (DEL)
         }
-        console.log("current index: " + self.index, self.inputs_array);
     };
     this.number_clicked = function(clicked_value) {
         var last_value = null;
@@ -125,7 +124,6 @@ function Calculator() {
         if (self.index > 2) {
             //index will be greater than 2 after you've entered 3 objects already (number, operator, number)
             if ( (clicked_value === "+" || clicked_value === "-") ) {
-                console.log("test");
                 /**
                  * if clicked button was "+" or "-"
                  * send the array to the prepare_answer method to automatically do all math possible
@@ -163,7 +161,6 @@ function Calculator() {
              * If the inputs array has more than 3 things in it, it needs to use order of operations
              * the array will only have more than 3 items if multiplication / division was tried before addition / subtraction was automatically solved
              */
-            console.log("array needs order of operations");
             for (var i = lastIndex; i > 0; i -= 2) {
                 /**
                  * loop through the array from the end, decrementing i by 2 each loop
@@ -186,7 +183,6 @@ function Calculator() {
                 }
                 else {
                     //if it's not a number it has to be an operator
-                    console.log("found an operator", i, i-2);
                     i++;
                     //go to the index num2 would have been
                     operator = this.inputs_array[i - 1].value;
@@ -222,7 +218,6 @@ function Calculator() {
         }
         else {
             //the inputs array doesn't have more than objects in it
-            console.log("array doesn't need order of operations");
             for (i = 0; i < this.inputs_array.length; i++) {
                 //loop through the array from the beginning
                 if (this.inputs_array[i].type === "number" && num1 === null) {
@@ -290,12 +285,10 @@ function Calculator() {
             //if the inputs array has any objects in it
             if (self.inputs_array[self.index].history) {
                 //if the item at the current index (we went backward one index) has a history property
-                //console.log("current index", self.index);
                 self.inputs_array = self.inputs_array[self.index].history;
                 //change the inputs array to the array of objects in the history property
                 self.index = self.inputs_array.length;
                 //move to one space after the last item in the new inputs array we got from history
-                //console.log("current index", self.index);
                 if (self.inputs_array[self.inputs_array.length - 1].type === "operator") {
                     self.inputs_array.pop();
                     self.last_operation = null;
@@ -319,7 +312,6 @@ function Calculator() {
                 if (self.inputs_array.length) {
                     //if the array still has objects after pop();
                     if (self.inputs_array[self.index].type === "operator") {
-                        console.log("found an operator");
                         self.inputs_array.pop();
                         self.last_operation = null;
                         //if the current object is an operator, remove it since we only want to go back to numbers
